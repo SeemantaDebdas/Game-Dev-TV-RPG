@@ -46,7 +46,6 @@ namespace RPG.Combat
             {
                 anim.SetTrigger(AttackTrigger);
                 timeSinceLastAttack = 0;
-                target.GetComponent<Health>().TakeDamage(10f);
             }
         }
 
