@@ -12,10 +12,11 @@ namespace RPG.Combat
         [SerializeField] float weaponDamage = 10f;
         [SerializeField] float timeBetweenAttacks = 1f;
 
-        Transform target;
+        Health target;
 
         Animator anim;
-        int AttackTrigger = Animator.StringToHash("AttackTrigger");
+        readonly int AttackTrigger = Animator.StringToHash("AttackTrigger");
+        readonly int CancelAttackTrigger = Animator.StringToHash("CancelAttackTrigger");
 
         float timeSinceLastAttack = 0;
         private void Awake()
@@ -27,11 +28,13 @@ namespace RPG.Combat
         {
             timeSinceLastAttack += Time.deltaTime;
 
-            if (target == null) return;
+            if (target == null || target.IsDead) return;
 
-            if (!(Vector3.Distance(transform.position, target.position) <= weaponRange))
+            transform.LookAt(target.transform);
+
+            if (!(Vector3.Distance(transform.position, target.transform.position) <= weaponRange))
             {
-                GetComponent<Mover>().MoveTo(target.position);
+                GetComponent<Mover>().MoveTo(target.transform.position);
             }
             else
             {
@@ -49,24 +52,29 @@ namespace RPG.Combat
             }
         }
 
+        public bool CanAttack(CombatTarget combatTarget)
+        {
+            return !combatTarget.GetComponent<Health>().IsDead && combatTarget != null;
+        }
+
         public void Attack(CombatTarget combatTarget) 
         {
-            target = combatTarget.transform;
+            target = combatTarget.transform.GetComponent<Health>();
             GetComponent<ActionScheduler>().StartAction(this);
         }
 
-        public void CancelAttack() => target = null;
-
         public void CancelAction()
         {
-            CancelAttack();
+            anim.SetTrigger(CancelAttackTrigger);
+            target = null;
         }
 
-        //Animation Event
+
+        //Animation Event called from Attack Animation
         void Hit()
         {
             if (target != null)
-                target.GetComponent<Health>().TakeDamage(weaponDamage);
+                target.TakeDamage(weaponDamage);
         }
     }
 }

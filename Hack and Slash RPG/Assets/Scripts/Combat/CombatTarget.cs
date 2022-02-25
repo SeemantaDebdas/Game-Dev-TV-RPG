@@ -2,17 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CombatTarget : MonoBehaviour
+namespace RPG.Combat
 {
-    // Start is called before the first frame update
-    void Start()
+    [RequireComponent(typeof(Health))]
+    public class CombatTarget : MonoBehaviour
     {
-        
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }
