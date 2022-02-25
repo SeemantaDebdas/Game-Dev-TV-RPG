@@ -47,6 +47,7 @@ namespace RPG.Combat
         {
             if (timeSinceLastAttack >= timeBetweenAttacks)
             {
+                anim.ResetTrigger(CancelAttackTrigger);
                 anim.SetTrigger(AttackTrigger);
                 timeSinceLastAttack = 0;
             }
@@ -65,6 +66,7 @@ namespace RPG.Combat
 
         public void CancelAction()
         {
+            anim.ResetTrigger(AttackTrigger);
             anim.SetTrigger(CancelAttackTrigger);
             target = null;
         }
