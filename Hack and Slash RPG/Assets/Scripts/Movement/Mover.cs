@@ -22,15 +22,15 @@ namespace RPG.Movement
             UpdateAnimation();
         }
 
-        public void StartMoveAction(Vector3 destionation)
+        public void StartMoveAction(Vector3 destination)
         {
             GetComponent<ActionScheduler>().StartAction(this);
-            MoveTo(destionation);
+            MoveTo(destination);
         }
 
-        public void MoveTo(Vector3 destionation)
+        public void MoveTo(Vector3 destination)
         {
-            navMeshAgent.SetDestination(destionation);
+            navMeshAgent.SetDestination(destination);
             navMeshAgent.isStopped = false;
         }
 
