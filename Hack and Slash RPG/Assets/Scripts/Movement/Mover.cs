@@ -1,8 +1,8 @@
-using RPG.Core;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using RPG.Core;
 
 namespace RPG.Movement
 {
@@ -10,15 +10,19 @@ namespace RPG.Movement
     {
         NavMeshAgent navMeshAgent;
         Animator anim;
+        Health health;
 
         private void Awake()
         {
             anim = GetComponent<Animator>();
             navMeshAgent = GetComponent<NavMeshAgent>();
+            health = GetComponent<Health>();
         }
 
         private void Update()
         {
+            navMeshAgent.enabled = !health.IsDead;
+
             UpdateAnimation();
         }
 

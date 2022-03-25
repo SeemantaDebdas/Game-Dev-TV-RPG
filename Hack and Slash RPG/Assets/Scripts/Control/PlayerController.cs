@@ -1,6 +1,7 @@
 using UnityEngine;
 using RPG.Movement;
 using RPG.Combat;
+using RPG.Core;
 
 namespace RPG.Control
 {
@@ -9,16 +10,19 @@ namespace RPG.Control
         Camera cam;
         Mover mover;
         Fighter fighter;
+        Health health;
 
         private void Awake()
         {
             mover = GetComponent<Mover>();
             fighter = GetComponent<Fighter>();
+            health = GetComponent<Health>();
             cam = Camera.main;
         }
 
         private void Update()
         {
+            if (health.IsDead) return;
             if(InteractWithCombat()) return;
             if(InteractWithMovement()) return;
 
@@ -32,10 +36,10 @@ namespace RPG.Control
             {
                 if (!hit.collider.TryGetComponent(out CombatTarget combatTarget)) continue;
 
-                if (!fighter.CanAttack(combatTarget)) continue;
+                if (!fighter.CanAttack(combatTarget.gameObject)) continue;
 
                 if (Input.GetMouseButtonDown(0))
-                        fighter.Attack(combatTarget);
+                        fighter.Attack(combatTarget.gameObject);
                 return true;
             }
             return false;

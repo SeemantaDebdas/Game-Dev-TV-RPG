@@ -59,6 +59,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2137522356448077614, guid: 872d321ed5fa70448913855f0bc940dd, type: 3}
+      propertyPath: timeBetweenAttacks
+      value: 1.5
+      objectReference: {fileID: 0}
     - target: {fileID: 6336572449586006601, guid: 872d321ed5fa70448913855f0bc940dd, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -107,12 +111,12 @@ PrefabInstance:
       propertyPath: m_Name
       value: Enemy
       objectReference: {fileID: 0}
+    - target: {fileID: 6336572449586006606, guid: 872d321ed5fa70448913855f0bc940dd, type: 3}
+      propertyPath: m_Speed
+      value: 3.8
+      objectReference: {fileID: 0}
     m_RemovedComponents:
-    - {fileID: 296705069, guid: 872d321ed5fa70448913855f0bc940dd, type: 3}
-    - {fileID: 6336572449586006607, guid: 872d321ed5fa70448913855f0bc940dd, type: 3}
-    - {fileID: 2137522356448077614, guid: 872d321ed5fa70448913855f0bc940dd, type: 3}
-    - {fileID: 3674911052474809391, guid: 872d321ed5fa70448913855f0bc940dd, type: 3}
-    - {fileID: 6336572449586006606, guid: 872d321ed5fa70448913855f0bc940dd, type: 3}
+    - {fileID: 0}
   m_SourcePrefab: {fileID: 100100000, guid: 872d321ed5fa70448913855f0bc940dd, type: 3}
 --- !u!1 &5913465307240814714 stripped
 GameObject:

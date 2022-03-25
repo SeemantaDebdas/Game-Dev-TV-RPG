@@ -12,6 +12,7 @@ namespace RPG.Combat
         [SerializeField] float weaponDamage = 10f;
         [SerializeField] float timeBetweenAttacks = 1f;
 
+        ActionScheduler actionScheduler;
         Health target;
 
         Animator anim;
@@ -22,6 +23,7 @@ namespace RPG.Combat
         private void Awake()
         {
             anim = GetComponent<Animator>();
+            actionScheduler = GetComponent<ActionScheduler>();
         }
 
         private void Update()
@@ -53,15 +55,17 @@ namespace RPG.Combat
             }
         }
 
-        public bool CanAttack(CombatTarget combatTarget)
+        public bool CanAttack(GameObject combatTarget)
         {
-            return !combatTarget.GetComponent<Health>().IsDead && combatTarget != null;
+            if (combatTarget == null) return false;
+            Health targetToTest = combatTarget.GetComponent<Health>();
+            return targetToTest != null && !targetToTest.IsDead;
         }
 
-        public void Attack(CombatTarget combatTarget) 
+        public void Attack(GameObject combatTarget) 
         {
             target = combatTarget.transform.GetComponent<Health>();
-            GetComponent<ActionScheduler>().StartAction(this);
+            actionScheduler.StartAction(this);
         }
 
         public void CancelAction()
