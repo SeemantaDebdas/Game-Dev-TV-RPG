@@ -70,9 +70,15 @@ namespace RPG.Combat
 
         public void CancelAction()
         {
+            StopAttack();
+            GetComponent<Mover>().CancelAction();
+            target = null;
+        }
+
+        private void StopAttack()
+        {
             anim.ResetTrigger(AttackTrigger);
             anim.SetTrigger(CancelAttackTrigger);
-            target = null;
         }
 
 
