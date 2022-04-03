@@ -11,8 +11,7 @@ namespace RPG.Cinematics
         private void OnTriggerEnter(Collider other)
         {
             if (other.CompareTag("Player") && !isTriggered)
-            {
-                print("executed");
+            { 
                 isTriggered = true;
                 GetComponent<PlayableDirector>().Play();
             }
