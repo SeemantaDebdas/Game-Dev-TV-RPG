@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.AI;
 
-namespace RPG.SceneManagemnet
+namespace RPG.SceneManagement
 {
     public class Portal : MonoBehaviour
     {
@@ -45,10 +45,19 @@ namespace RPG.SceneManagemnet
             Fader fader = FindObjectOfType<Fader>();
 
             yield return fader.FadeIn(fadeInTime);
+
+            //saving state before loading another scene
+            FindObjectOfType<SavingWrapper>().Save();
+
             yield return SceneManager.LoadSceneAsync(sceneIdx);
+
+            //loading state after scene load is complete
+            FindObjectOfType<SavingWrapper>().Load();
 
             Portal portal = GetOtherPortal();
             UpdatePlayerPosition(portal);
+
+            FindObjectOfType<SavingWrapper>().Save();
 
             yield return new WaitForSeconds(fadeWaitTime);
             yield return fader.FadeOut(fadeOutTime);

@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using RPG.Core;
+using RPG.Saving;
 
 namespace RPG.Movement
 {
-    public class Mover : MonoBehaviour,IAction
+    public class Mover : MonoBehaviour,IAction,ISaveable
     {
         [SerializeField] float maxSpeed = 5f;
         NavMeshAgent navMeshAgent;
@@ -49,6 +50,27 @@ namespace RPG.Movement
         {
             //cancel this action
             navMeshAgent.isStopped = true;
+        }
+
+        public object CaptureState()
+        {
+            return new SerializableVector(transform.position);
+        }
+
+        public void RestoreState(object state)
+        {
+            SerializableVector serializedVector = (SerializableVector)state;
+            transform.position = serializedVector.ToVector();
+            #region Why Cancel Current Action?
+            /*------------------------------------------------
+             * Cancelling current action i.e moving or fighting 
+             * so that when restoring state, it doesn't cause
+             * unwanted behaviour like moving to a spot or 
+             * attacking without any enemy in sight
+             *------------------------------------------------
+             */
+            #endregion
+            GetComponent<ActionScheduler>().CancelCurrentAction();
         }
     }
 }
