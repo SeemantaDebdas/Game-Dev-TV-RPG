@@ -8,12 +8,13 @@ namespace RPG.Combat
 {
     public class Fighter : MonoBehaviour,IAction
     {
-        [SerializeField] float weaponRange = 2f;
-        [SerializeField] float weaponDamage = 10f;
+        [SerializeField] Transform handTransform = null;
+        [SerializeField] Weapon defaultWeapon = null;
         [SerializeField] float timeBetweenAttacks = 1f;
 
         ActionScheduler actionScheduler;
         Health target;
+        Weapon currentWeapon = null;
 
         Animator anim;
         readonly int AttackTrigger = Animator.StringToHash("AttackTrigger");
@@ -24,6 +25,7 @@ namespace RPG.Combat
         {
             anim = GetComponent<Animator>();
             actionScheduler = GetComponent<ActionScheduler>();
+            EquipWeapon(defaultWeapon);
         }
 
         private void Update()
@@ -34,7 +36,7 @@ namespace RPG.Combat
 
             transform.LookAt(target.transform);
 
-            if (!(Vector3.Distance(transform.position, target.transform.position) <= weaponRange))
+            if (!(Vector3.Distance(transform.position, target.transform.position) <= currentWeapon.WeaponRange))
             {
                 GetComponent<Mover>().MoveTo(target.transform.position);
             }
@@ -81,12 +83,18 @@ namespace RPG.Combat
             anim.SetTrigger(CancelAttackTrigger);
         }
 
+        public void EquipWeapon(Weapon weapon)
+        {
+            currentWeapon = weapon;
+            weapon.SpawnWeapon(handTransform, anim);
+        }
+
 
         //Animation Event called from Attack Animation
         void Hit()
         {
             if (target != null)
-                target.TakeDamage(weaponDamage);
+                target.TakeDamage(currentWeapon.WeaponDamage);
         }
     }
 }
