@@ -44,6 +44,7 @@ namespace RPG.Saving
             if (Application.isPlaying) return;
             //either of two checks work. Checking if the game object is in prefab mode or not
             if (gameObject.scene.name == null || gameObject.scene.rootCount == 0) return;
+            if (string.IsNullOrEmpty(gameObject.scene.path)) return;
 
 
             SerializedObject serializedObject = new SerializedObject(this);

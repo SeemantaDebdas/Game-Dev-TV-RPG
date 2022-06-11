@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using RPG.Movement;
 using RPG.Core;
+using RPG.Saving;
+using RPG.Attributes;
 
 namespace RPG.Combat
 {
-    public class Fighter : MonoBehaviour,IAction
+    public class Fighter : MonoBehaviour,IAction,ISaveable
     {
-        [SerializeField] Transform handTransform = null;
+        [SerializeField] Transform rightHandTransform = null;
+        [SerializeField] Transform leftHandTransform = null;
         [SerializeField] Weapon defaultWeapon = null;
         [SerializeField] float timeBetweenAttacks = 1f;
 
@@ -25,7 +28,9 @@ namespace RPG.Combat
         {
             anim = GetComponent<Animator>();
             actionScheduler = GetComponent<ActionScheduler>();
-            EquipWeapon(defaultWeapon);
+
+            if(currentWeapon == null)
+                EquipWeapon(defaultWeapon);
         }
 
         private void Update()
@@ -85,17 +90,52 @@ namespace RPG.Combat
 
         public void EquipWeapon(Weapon weapon)
         {
+            if (weapon == null)
+            {
+                Debug.Log($"{name} is trying to equip a null weapon.");
+            }
+            if (weapon == null) return;  
             currentWeapon = weapon;
-            weapon.SpawnWeapon(handTransform, anim);
+            weapon.SpawnWeapon(rightHandTransform,leftHandTransform, anim);
+        }
+
+        public object CaptureState()
+        {
+            if (currentWeapon == null)
+            {
+                Debug.Log($"{name} does not have a weapon equipped in CaptureState()");
+            }
+            return currentWeapon.name;
+        }
+
+        public void RestoreState(object state)
+        {
+            //loading the weapon from assets folder
+            //that matches the name of the default weapon
+            Weapon weapon;
+            weapon = Resources.Load<Weapon>((string)state);
+            EquipWeapon(weapon);
         }
 
 
         //Animation Event called from Attack Animation
         void Hit()
         {
-            if (target != null)
+            if (target == null) return;
+
+            if (currentWeapon.HasProjectile)
+            {
+                currentWeapon.LaunchProjectile(rightHandTransform, leftHandTransform, target);
+            }
+            else
+            {
                 target.TakeDamage(currentWeapon.WeaponDamage);
+            }
         }
+
+        //Animation Event called from Bow animation
+        void Shoot() => Hit();
+
     }
 }
 

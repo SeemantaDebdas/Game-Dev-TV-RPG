@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using RPG.Core;
 using RPG.Saving;
+using RPG.Attributes;
 
 namespace RPG.Movement
 {
@@ -54,13 +55,17 @@ namespace RPG.Movement
 
         public object CaptureState()
         {
-            return new SerializableVector(transform.position);
+            Dictionary<string, object> data = new Dictionary<string, object>();
+            data["position"] = new SerializableVector(transform.position);
+            data["rotation"] = new SerializableVector(transform.eulerAngles);
+            return data;
         }
 
         public void RestoreState(object state)
         {
-            SerializableVector serializedVector = (SerializableVector)state;
-            transform.position = serializedVector.ToVector();
+            Dictionary<string, object> data = (Dictionary<string, object>)state;
+            transform.position = ((SerializableVector)data["position"]).ToVector();
+            transform.eulerAngles = ((SerializableVector)data["rotation"]).ToVector();
             #region Why Cancel Current Action?
             /*------------------------------------------------
              * Cancelling current action i.e moving or fighting 

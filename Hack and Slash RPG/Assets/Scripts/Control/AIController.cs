@@ -6,6 +6,7 @@ using RPG.Combat;
 using RPG.Movement;
 using UnityEditor;
 using System;
+using RPG.Attributes;
 
 namespace RPG.Control
 {
