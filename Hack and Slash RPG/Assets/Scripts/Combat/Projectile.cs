@@ -9,8 +9,10 @@ public class Projectile : MonoBehaviour
     [SerializeField] bool isHoming = false;
     [SerializeField] float speed = 1;
     [SerializeField] float projectleLifeTime = 2f;
+
     Health target = null;
     float damage = 0;
+    GameObject instigator = null;
 
     private void Start()
     {
@@ -19,10 +21,11 @@ public class Projectile : MonoBehaviour
         Destroy(gameObject, projectleLifeTime);
     }
 
-    public void SetTraget(Health target, float damage)
+    public void SetTraget(Health target, float damage, GameObject instigator)
     {
         this.target = target;
         this.damage = damage;
+        this.instigator = instigator;
     }
 
     // Update is called once per frame
@@ -53,7 +56,7 @@ public class Projectile : MonoBehaviour
                 Destroy(impactParticlePrefabSpawn, 0.5f);
             }
 
-            targetHealth.TakeDamage(damage);
+            targetHealth.TakeDamage(damage ,instigator);
             Destroy(gameObject);
         }
     }

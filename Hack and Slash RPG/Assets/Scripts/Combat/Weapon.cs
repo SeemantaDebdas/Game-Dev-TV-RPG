@@ -38,12 +38,12 @@ namespace RPG.Combat
             else if (overrideController != null)
                 anim.runtimeAnimatorController = overrideController.runtimeAnimatorController;
         }
-        public void LaunchProjectile(Transform rightHand, Transform leftHand, Health target)
+        public void LaunchProjectile(Transform rightHand, Transform leftHand, Health target, GameObject instigator)
         {
             Transform handTransform = isRightHanded ? rightHand : leftHand;
 
             Projectile projectileSpawn = Instantiate(projectile, handTransform.position, Quaternion.identity);
-            projectileSpawn.SetTraget(target, weaponDamage);
+            projectileSpawn.SetTraget(target, weaponDamage, instigator);
         }
         private void DestroyOldWeapon(Transform rightHand, Transform leftHand)
         {
