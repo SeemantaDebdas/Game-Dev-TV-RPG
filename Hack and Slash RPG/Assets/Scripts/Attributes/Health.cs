@@ -25,7 +25,7 @@ namespace RPG.Attributes
 
         private void Start()
         {
-            initialHealth = GetComponent<BaseStats>().GetHealth();
+            initialHealth = GetComponent<BaseStats>().GetStat(Stat.Health);
             health = initialHealth;
         }
 
@@ -60,7 +60,7 @@ namespace RPG.Attributes
             Experience instigatorExperience = instigator.GetComponent<Experience>();
 
             if (instigatorExperience == null) return;
-            instigatorExperience.GainExperience(GetComponent<BaseStats>().GetExperience());
+            instigatorExperience.GainExperience(GetComponent<BaseStats>().GetStat(Stat.ExperienceReward));
         }
 
         public object CaptureState()
