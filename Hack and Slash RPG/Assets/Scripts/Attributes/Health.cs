@@ -7,8 +7,7 @@ namespace RPG.Attributes
 {
     public class Health : MonoBehaviour,ISaveable
     {
-        [SerializeField] float health = 100f;
-        float initialHealth = 0f;
+        float health = -1f;
 
         Animator anim;
         ActionScheduler actionScheduler;
@@ -25,8 +24,8 @@ namespace RPG.Attributes
 
         private void Start()
         {
-            initialHealth = GetComponent<BaseStats>().GetStat(Stat.Health);
-            health = initialHealth;
+            if(health < 0f)//if health has not been restored using the Restore Function down below
+                health = GetComponent<BaseStats>().GetStat(Stat.Health); 
         }
 
         public void TakeDamage(float damage, GameObject instigator)
@@ -43,13 +42,24 @@ namespace RPG.Attributes
 
         public float GetHealthPercentage()
         {
-            return (health / initialHealth) * 100;
+            return (health / GetComponent<BaseStats>().GetStat(Stat.Health)) * 100;
         }
 
         private void Die()
         {
             if (isDead) return;
 
+            if (anim == null)
+            {
+                Debug.LogError($"{name}'s animator does not appear to be assigned, re-aquiring it");
+                anim = GetComponent<Animator>();
+            }
+            if (actionScheduler == null)
+            {
+                Debug.LogError($"{name}'s action scheduler not assigned, re-aquiring it");
+                actionScheduler = GetComponent<ActionScheduler>();
+            }
+                
             isDead = true;
             anim.SetTrigger(DeathTrigger);
             actionScheduler.CancelCurrentAction();

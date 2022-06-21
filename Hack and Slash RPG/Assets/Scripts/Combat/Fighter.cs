@@ -29,20 +29,30 @@ namespace RPG.Combat
             anim = GetComponent<Animator>();
             actionScheduler = GetComponent<ActionScheduler>();
 
-            if(currentWeapon == null)
+        }
+
+        private void Start()
+        {
+            if (currentWeapon == null)
                 EquipWeapon(defaultWeapon);
         }
 
         private void Update()
         {
             timeSinceLastAttack += Time.deltaTime;
-
+        
             if (target == null || target.IsDead) return;
 
             transform.LookAt(target.transform);
-
+            if(currentWeapon == null)
+            {
+                Debug.LogError($"{name}'s currentWeapon is not set");
+            }
             if (!(Vector3.Distance(transform.position, target.transform.position) <= currentWeapon.WeaponRange))
             {
+                Mover mover = GetComponent<Mover>();
+                if(mover == null)
+                    Debug.LogError($"{name}'s Mover is not assigned");
                 GetComponent<Mover>().MoveTo(target.transform.position);
             }
             else
@@ -94,9 +104,19 @@ namespace RPG.Combat
             {
                 Debug.Log($"{name} is trying to equip a null weapon.");
             }
-            if (weapon == null) return;  
-            currentWeapon = weapon;
-            weapon.SpawnWeapon(rightHandTransform,leftHandTransform, anim);
+            if (weapon == null) return;
+            if (anim == null)
+            {
+                Debug.Log($"{name}'s animator does not appear to be assigned, re-aquiring it");
+                anim = GetComponent<Animator>();
+                if (anim == null)
+                {
+                    Debug.LogError($"{name} does not have an Animator attached!");
+                    return;
+                }
+                currentWeapon = weapon;
+                weapon.SpawnWeapon(rightHandTransform, leftHandTransform, anim);
+            }
         }
 
         public object CaptureState()

@@ -13,7 +13,6 @@ namespace RPG.Combat
         {
             if (other.CompareTag("Player"))
             {
-                Debug.Log("Triggering");
                 Fighter playerFighter = other.GetComponent<Fighter>();
                 playerFighter.EquipWeapon(weapon);
                 StartCoroutine(HideForSeconds(respawnTime));

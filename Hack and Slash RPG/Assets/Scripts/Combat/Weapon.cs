@@ -21,6 +21,13 @@ namespace RPG.Combat
 
         public void SpawnWeapon(Transform rightHand,Transform leftHand, Animator anim)
         {
+
+            if (anim == null)
+            {
+                Debug.LogError($"{rightHand.GetComponentInParent<Fighter>().name} is trying to equip a {name} but no animator has been passed to SpawnWeapon!");
+                return;
+            }
+
             //Destroy old Weapon before equipping new weapon
             DestroyOldWeapon(rightHand, leftHand);
 
